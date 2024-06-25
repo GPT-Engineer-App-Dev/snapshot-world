@@ -1,17 +1,51 @@
-// Update this page (the content is just a fallback if you fail and example)
-// Use chakra-ui
-import { Container, Text, VStack } from "@chakra-ui/react";
-
-// Example of using react-icons
-// import { FaRocket } from "react-icons/fa";
-// <IconButton aria-label="Add" icon={<FaRocket />} size="lg" />; // IconButton would also have to be imported from chakra
+import { Box, Container, VStack, Heading, Input, Button, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { useState } from "react";
 
 const Index = () => {
+  const [photos, setPhotos] = useState([]);
+  const [photoUrl, setPhotoUrl] = useState("");
+
+  const handleUpload = () => {
+    if (photoUrl) {
+      setPhotos([...photos, photoUrl]);
+      setPhotoUrl("");
+    }
+  };
+
   return (
-    <Container centerContent maxW="container.md" height="100vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-      <VStack spacing={4}>
-        <Text fontSize="2xl">Your Blank Canvas</Text>
-        <Text>Chat with the agent to start making edits.</Text>
+    <Container maxW="container.lg" p={4}>
+      <VStack spacing={8}>
+        <Heading as="h1" size="xl" textAlign="center" mt={8}>
+          Photo Sharing Platform
+        </Heading>
+        <Box w="100%" p={4} borderWidth="1px" borderRadius="lg">
+          <Heading as="h2" size="md" mb={4}>
+            Upload a Photo
+          </Heading>
+          <Input
+            placeholder="Enter photo URL"
+            value={photoUrl}
+            onChange={(e) => setPhotoUrl(e.target.value)}
+            mb={4}
+          />
+          <Button colorScheme="blue" onClick={handleUpload}>
+            Upload
+          </Button>
+        </Box>
+        <Box w="100%" p={4} borderWidth="1px" borderRadius="lg">
+          <Heading as="h2" size="md" mb={4}>
+            Photo Feed
+          </Heading>
+          {photos.length === 0 ? (
+            <Text>No photos uploaded yet.</Text>
+          ) : (
+            <SimpleGrid columns={[1, 2, 3]} spacing={4}>
+              {photos.map((url, index) => (
+                <Image key={index} src={url} alt={`Photo ${index + 1}`} borderRadius="md" />
+              ))}
+            </SimpleGrid>
+          )}
+        </Box>
       </VStack>
     </Container>
   );
