@@ -3,12 +3,16 @@ import { useState } from "react";
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [photoFile, setPhotoFile] = useState(null);
 
   const handleUpload = () => {
-    if (photoUrl) {
-      setPhotos([...photos, photoUrl]);
-      setPhotoUrl("");
+    if (photoFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotos([...photos, reader.result]);
+      };
+      reader.readAsDataURL(photoFile);
+      setPhotoFile(null);
     }
   };
 
@@ -23,9 +27,9 @@ const Index = () => {
             Upload a Photo
           </Heading>
           <Input
-            placeholder="Enter photo URL"
-            value={photoUrl}
-            onChange={(e) => setPhotoUrl(e.target.value)}
+            type="file"
+            accept="image/*"
+            onChange={(e) => setPhotoFile(e.target.files[0])}
             mb={4}
           />
           <Button colorScheme="blue" onClick={handleUpload}>
